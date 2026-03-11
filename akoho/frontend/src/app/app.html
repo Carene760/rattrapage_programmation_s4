@@ -1,0 +1,16 @@
+<main class="main">
+  <div class="content">
+    <h1>{{ title() }}</h1>
+    <nav class="nav">
+      <a routerLink="/race" routerLinkActive="active">Races</a>
+      <a routerLink="/lot" routerLinkActive="active">Lots</a>
+      <a routerLink="/nutrition" routerLinkActive="active">Nutrition</a>
+      <a routerLink="/deces" routerLinkActive="active">Décès</a>
+      <a routerLink="/oeufs" routerLinkActive="active">Oeufs</a>
+      <a routerLink="/couverture-oeufs" routerLinkActive="active">Couverture Oeufs</a>
+      <a routerLink="/eclosion-oeufs" routerLinkActive="active">Éclosion Oeufs</a>
+      <a routerLink="/situation" routerLinkActive="active">Situation</a>
+    </nav>
+    <router-outlet />
+  </div>
+</main>

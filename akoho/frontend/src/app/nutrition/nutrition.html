@@ -1,0 +1,92 @@
+<div class="container">
+  <h2>Nutrition - Détail</h2>
+
+  @if (error()) {
+    <p class="error">{{ error() }}</p>
+  }
+
+  <form (ngSubmit)="onSubmit()" class="form">
+    <div class="form-row">
+      <label>Race</label>
+      <select [(ngModel)]="selectedRace" name="race">
+        <option [value]="0" disabled>-- Choisir une race --</option>
+        @for (race of races(); track race.id_race) {
+          <option [value]="race.id_race">{{ race.nom_race }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="form-row">
+      <label>Semaine</label>
+      <select [(ngModel)]="selectedSemaine" name="semaine">
+        @for (s of semaines; track s) {
+          <option [value]="s">{{ s }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="form-row">
+      <label>Variation de poids (g)</label>
+      <input type="number" [(ngModel)]="variationPoids" name="variationPoids" />
+    </div>
+
+    <div class="form-row">
+      <label>Quantité nourriture (g)</label>
+      <input type="number" [(ngModel)]="nourriture" name="nourriture" min="0" />
+    </div>
+
+    <button type="submit">Ajouter</button>
+  </form>
+
+  <h3>Tableau nutrition</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Race</th>
+        <th>Semaine</th>
+        <th>Variation poids (g)</th>
+        <th>Qté nourriture (g)</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (d of details(); track d.id_nutrition_fille) {
+        @if (editingId() === d.id_nutrition_fille) {
+          <tr>
+            <td>
+              <select [(ngModel)]="editSelectedRace" name="editRace" class="edit-input">
+                @for (race of races(); track race.id_race) {
+                  <option [value]="race.id_race">{{ race.nom_race }}</option>
+                }
+              </select>
+            </td>
+            <td>
+              <select [(ngModel)]="editSelectedSemaine" name="editSemaine" class="edit-input">
+                @for (s of semaines; track s) {
+                  <option [value]="s">{{ s }}</option>
+                }
+              </select>
+            </td>
+            <td><input type="number" [(ngModel)]="editVariationPoids" name="editVariationPoids" class="edit-input" /></td>
+            <td><input type="number" [(ngModel)]="editNourriture" name="editNourriture" class="edit-input" min="0" /></td>
+            <td class="actions">
+              <button type="button" class="btn-save" (click)="onSaveEdit(d.id_nutrition_fille)">Enregistrer</button>
+              <button type="button" class="btn-cancel" (click)="onCancelEdit()">Annuler</button>
+            </td>
+          </tr>
+        } @else {
+          <tr>
+            <td>{{ d.nom_race }}</td>
+            <td>{{ d.semaine }}</td>
+            <td>{{ d.variation_poids }}</td>
+            <td>{{ d.nourriture }}</td>
+            <td class="actions">
+              <button type="button" class="btn-edit" (click)="onEdit(d)">Modifier</button>
+              <button type="button" class="btn-delete" (click)="onDelete(d.id_nutrition_fille)">Supprimer</button>
+            </td>
+          </tr>
+        }
+      }
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,83 @@
+<div class="container">
+  <h2>Oeufs recueillis</h2>
+
+  @if (error()) {
+    <p class="error">{{ error() }}</p>
+  }
+
+  <form (ngSubmit)="onSubmit()" class="form">
+    <div class="form-row">
+      <label>Lot de poulets</label>
+      <select [(ngModel)]="selectedLot" name="lot">
+        <option [value]="0" disabled>-- Choisir un lot --</option>
+        @for (lot of lots(); track lot.id_lot) {
+          <option [value]="lot.id_lot">Lot #{{ lot.id_lot }} - {{ lot.nom_race }} ({{ lot.nbr_poulet }} poulets)</option>
+        }
+      </select>
+    </div>
+
+    <div class="form-row">
+      <label>Date de recensement</label>
+      <input type="date" [(ngModel)]="dateRecensement" name="dateRecensement" />
+    </div>
+
+    <div class="form-row">
+      <label>Nombre d'oeufs</label>
+      <input type="number" [(ngModel)]="nbrOeufs" name="nbrOeufs" min="1" />
+    </div>
+
+    <button type="submit">Ajouter</button>
+  </form>
+
+  <h3>Liste des oeufs recueillis</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Lot</th>
+        <th>Race</th>
+        <th>Date recensement</th>
+        <th>Nbr oeufs</th>
+        <th>Couvert</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (o of oeufs(); track o.id_lot_oeufs) {
+        @if (editingId() === o.id_lot_oeufs) {
+          <tr>
+            <td>{{ o.id_lot_oeufs }}</td>
+            <td>
+              <select [(ngModel)]="editSelectedLot" name="editLot" class="edit-input">
+                @for (lot of lots(); track lot.id_lot) {
+                  <option [value]="lot.id_lot">Lot #{{ lot.id_lot }} - {{ lot.nom_race }}</option>
+                }
+              </select>
+            </td>
+            <td>-</td>
+            <td><input type="date" [(ngModel)]="editDateRecensement" name="editDate" class="edit-input" /></td>
+            <td><input type="number" [(ngModel)]="editNbrOeufs" name="editNbrOeufs" class="edit-input" min="1" /></td>
+            <td>-</td>
+            <td class="actions">
+              <button type="button" class="btn-save" (click)="onSaveEdit(o.id_lot_oeufs)">Enregistrer</button>
+              <button type="button" class="btn-cancel" (click)="onCancelEdit()">Annuler</button>
+            </td>
+          </tr>
+        } @else {
+          <tr>
+            <td>{{ o.id_lot_oeufs }}</td>
+            <td>Lot #{{ o.id_lot }}</td>
+            <td>{{ o.nom_race }}</td>
+            <td>{{ o.date_recensement | date:'yyyy-MM-dd' }}</td>
+            <td>{{ o.nbr_oeufs }}</td>
+            <td>{{ o.couvert ? 'Oui' : 'Non' }}</td>
+            <td class="actions">
+              <button type="button" class="btn-edit" (click)="onEdit(o)">Modifier</button>
+              <button type="button" class="btn-delete" (click)="onDelete(o.id_lot_oeufs)">Supprimer</button>
+            </td>
+          </tr>
+        }
+      }
+    </tbody>
+  </table>
+</div>

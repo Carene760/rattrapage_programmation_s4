@@ -1,0 +1,66 @@
+<div class="container">
+  <h2>Éclosion des oeufs</h2>
+
+  @if (error()) {
+    <p class="error">{{ error() }}</p>
+  }
+  @if (success()) {
+    <p class="success">{{ success() }}</p>
+  }
+
+  <form (ngSubmit)="onSubmit()" class="form">
+    <div class="form-row">
+      <label>Couverture</label>
+      <select [(ngModel)]="selectedCouverture" name="couverture">
+        <option [value]="0" disabled>-- Choisir une couverture --</option>
+        @for (c of availableCouvertures(); track c.id_couverture) {
+          <option [value]="c.id_couverture">Couverture #{{ c.id_couverture }} - {{ c.nom_race }} ({{ c.nbr_oeufs }} oeufs, couvert le {{ c.date_couverture | date:'yyyy-MM-dd' }})</option>
+        }
+      </select>
+    </div>
+
+    <div class="form-row">
+      <label>Date d'éclosion</label>
+      <input type="date" [(ngModel)]="dateEclosion" name="dateEclosion" />
+    </div>
+
+    <div class="form-row">
+      <label>Nombre d'oeufs éclos (max : {{ getMaxOeufs() }})</label>
+      <input type="number" [(ngModel)]="nbrOeufsEclos" name="nbrOeufsEclos" min="0" [max]="getMaxOeufs()" placeholder="0" />
+    </div>
+
+    @if (nbrOeufsEclos !== null && nbrOeufsEclos >= 0 && getMaxOeufs() > 0) {
+      <div class="info">
+        Oeufs pourris (non éclos) : <strong>{{ getMaxOeufs() - nbrOeufsEclos }}</strong>
+      </div>
+    }
+
+    <button type="submit">Valider l'éclosion</button>
+  </form>
+
+  <h3>Liste des éclosions</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Couverture</th>
+        <th>Race</th>
+        <th>Date éclosion</th>
+        <th>Oeufs éclos</th>
+        <th>Oeufs pourris</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (e of eclosions(); track e.id_eclosion) {
+        <tr>
+          <td>{{ e.id_eclosion }}</td>
+          <td>Couverture #{{ e.id_couverture }}</td>
+          <td>{{ e.nom_race }}</td>
+          <td>{{ e.date_eclosion | date:'yyyy-MM-dd' }}</td>
+          <td>{{ e.nbr_oeufs_eclos }}</td>
+          <td>{{ e.nbr_oeufs_pourris }}</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

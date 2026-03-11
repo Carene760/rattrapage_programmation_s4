@@ -1,0 +1,57 @@
+<div class="container">
+  <h2>Couverture des oeufs</h2>
+
+  @if (error()) {
+    <p class="error">{{ error() }}</p>
+  }
+
+  <form (ngSubmit)="onSubmit()" class="form">
+    <div class="form-row">
+      <label>Lot d'oeufs</label>
+      <select [(ngModel)]="selectedLotOeufs" name="lotOeufs">
+        <option [value]="0" disabled>-- Choisir un lot d'oeufs --</option>
+        @for (o of availableOeufs(); track o.id_lot_oeufs) {
+          <option [value]="o.id_lot_oeufs">Lot oeufs #{{ o.id_lot_oeufs }} - {{ o.nom_race }} ({{ o.nbr_oeufs }} oeufs)</option>
+        }
+      </select>
+    </div>
+
+    <div class="form-row">
+      <label>Date de couverture</label>
+      <input type="date" [(ngModel)]="dateCouverture" name="dateCouverture" />
+    </div>
+
+    <div class="form-row checkbox-row">
+      <label>
+        <input type="checkbox" [(ngModel)]="couvrir" name="couvrir" />
+        Couvrir ce lot d'oeufs
+      </label>
+    </div>
+
+    <button type="submit">Valider</button>
+  </form>
+
+  <h3>Liste des couvertures</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Lot oeufs</th>
+        <th>Race</th>
+        <th>Nbr oeufs</th>
+        <th>Date couverture</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (c of couvertures(); track c.id_couverture) {
+        <tr>
+          <td>{{ c.id_couverture }}</td>
+          <td>Lot oeufs #{{ c.id_lot_oeufs }}</td>
+          <td>{{ c.nom_race }}</td>
+          <td>{{ c.nbr_oeufs }}</td>
+          <td>{{ c.date_couverture | date:'yyyy-MM-dd' }}</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

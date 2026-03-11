@@ -1,0 +1,106 @@
+<div class="container">
+  <h2>Insertion de lot</h2>
+
+  @if (error()) {
+    <p class="error">{{ error() }}</p>
+  }
+
+  <form (ngSubmit)="onSubmit()" class="form">
+    <div class="form-row">
+      <label>Race</label>
+      <select [(ngModel)]="selectedRace" name="race">
+        <option [value]="0" disabled>-- Choisir une race --</option>
+        @for (race of races(); track race.id_race) {
+          <option [value]="race.id_race">{{ race.nom_race }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="form-row">
+      <label>Âge (semaines)</label>
+      <select [(ngModel)]="selectedAge" name="age">
+        @for (a of ages; track a) {
+          <option [value]="a">{{ a }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="form-row">
+      <label>Date de création</label>
+      <input type="date" [(ngModel)]="dateCreation" name="dateCreation" />
+    </div>
+
+    <div class="form-row">
+      <label>Nombre de poulets</label>
+      <input type="number" [(ngModel)]="nbrPoulet" name="nbrPoulet" min="1" />
+    </div>
+
+    <div class="form-row">
+      <label>Poids initial moyen (g)</label>
+      <input type="number" [(ngModel)]="poidsInitial" name="poidsInitial" min="0" step="0.01" />
+    </div>
+
+    <button type="submit">Ajouter</button>
+  </form>
+
+  <h3>Liste des lots</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Race</th>
+        <th>Âge</th>
+        <th>Date création</th>
+        <th>Nbr poulets</th>
+        <th>Poids initial (g)</th>
+        <th>ID couverture</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (lot of lots(); track lot.id_lot) {
+        @if (editingId() === lot.id_lot) {
+          <tr>
+            <td>{{ lot.id_lot }}</td>
+            <td>
+              <select [(ngModel)]="editSelectedRace" name="editRace" class="edit-input">
+                @for (race of races(); track race.id_race) {
+                  <option [value]="race.id_race">{{ race.nom_race }}</option>
+                }
+              </select>
+            </td>
+            <td>
+              <select [(ngModel)]="editSelectedAge" name="editAge" class="edit-input">
+                @for (a of ages; track a) {
+                  <option [value]="a">{{ a }}</option>
+                }
+              </select>
+            </td>
+            <td><input type="date" [(ngModel)]="editDateCreation" name="editDateCreation" class="edit-input" /></td>
+            <td><input type="number" [(ngModel)]="editNbrPoulet" name="editNbrPoulet" class="edit-input" min="1" /></td>
+            <td><input type="number" [(ngModel)]="editPoidsInitial" name="editPoidsInitial" class="edit-input" min="0" step="0.01" /></td>
+            <td>{{ lot.id_couverture ?? 'null' }}</td>
+            <td class="actions">
+              <button type="button" class="btn-save" (click)="onSaveEdit(lot.id_lot)">Enregistrer</button>
+              <button type="button" class="btn-cancel" (click)="onCancelEdit()">Annuler</button>
+            </td>
+          </tr>
+        } @else {
+          <tr>
+            <td>{{ lot.id_lot }}</td>
+            <td>{{ lot.nom_race }}</td>
+            <td>{{ lot.age }}</td>
+            <td>{{ lot.date_creation | date:'yyyy-MM-dd' }}</td>
+            <td>{{ lot.nbr_poulet }}</td>
+            <td>{{ lot.poids_initial }}</td>
+            <td>{{ lot.id_couverture ?? 'null' }}</td>
+            <td class="actions">
+              <button type="button" class="btn-edit" (click)="onEdit(lot)">Modifier</button>
+              <button type="button" class="btn-delete" (click)="onDelete(lot.id_lot)">Supprimer</button>
+            </td>
+          </tr>
+        }
+      }
+    </tbody>
+  </table>
+</div>

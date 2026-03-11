@@ -1,0 +1,74 @@
+<div class="container">
+  <h2>Gestion des races</h2>
+
+  @if (error()) {
+    <p class="error">{{ error() }}</p>
+  }
+
+  <form (ngSubmit)="onCreate()" class="form">
+    <div class="form-row">
+      <label>Nom</label>
+      <input type="text" [(ngModel)]="nomRace" name="nomRace" />
+    </div>
+    <div class="form-row">
+      <label>Prix d'achat</label>
+      <input type="number" [(ngModel)]="prixAchat" name="prixAchat" />
+    </div>
+    <div class="form-row">
+      <label>Prix de vente</label>
+      <input type="number" [(ngModel)]="prixVente" name="prixVente" />
+    </div>
+    <div class="form-row">
+      <label>Prix oeuf</label>
+      <input type="number" [(ngModel)]="prixOeuf" name="prixOeuf" />
+    </div>
+    <div class="form-row">
+      <label>Prix nourriture</label>
+      <input type="number" [(ngModel)]="prixNourriture" name="prixNourriture" />
+    </div>
+    <button type="submit">Ajouter</button>
+  </form>
+
+  <h3>Liste des races</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Nom</th>
+        <th>Prix d'achat</th>
+        <th>Prix de vente</th>
+        <th>Prix oeuf</th>
+        <th>Prix nourriture</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (race of races(); track race.id_race) {
+        @if (editingId() === race.id_race) {
+          <tr>
+            <td><input type="text" [(ngModel)]="editNomRace" name="editNomRace" class="edit-input" /></td>
+            <td><input type="number" [(ngModel)]="editPrixAchat" name="editPrixAchat" class="edit-input" /></td>
+            <td><input type="number" [(ngModel)]="editPrixVente" name="editPrixVente" class="edit-input" /></td>
+            <td><input type="number" [(ngModel)]="editPrixOeuf" name="editPrixOeuf" class="edit-input" /></td>
+            <td><input type="number" [(ngModel)]="editPrixNourriture" name="editPrixNourriture" class="edit-input" /></td>
+            <td class="actions">
+              <button type="button" class="btn-save" (click)="onSaveEdit(race.id_race)">Enregistrer</button>
+              <button type="button" class="btn-cancel" (click)="onCancelEdit()">Annuler</button>
+            </td>
+          </tr>
+        } @else {
+          <tr>
+            <td>{{ race.nom_race }}</td>
+            <td>{{ race.prix_achat }}</td>
+            <td>{{ race.prix_vente }}</td>
+            <td>{{ race.prix_oeuf }}</td>
+            <td>{{ race.prix_nourriture }}</td>
+            <td class="actions">
+              <button type="button" class="btn-edit" (click)="onEdit(race)">Modifier</button>
+              <button type="button" class="btn-delete" (click)="onDelete(race.id_race)">Supprimer</button>
+            </td>
+          </tr>
+        }
+      }
+    </tbody>
+  </table>
+</div>

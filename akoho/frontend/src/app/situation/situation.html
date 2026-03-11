@@ -1,0 +1,78 @@
+<div class="container">
+  <h2>Situation du lot</h2>
+
+  @if (error()) {
+    <p class="error">{{ error() }}</p>
+  }
+
+  @if (warning()) {
+    <p class="warning">{{ warning() }}</p>
+  }
+
+  <form (ngSubmit)="onSearch()" class="form">
+    <div class="form-row">
+      <label>Sélectionner un lot</label>
+      <select [(ngModel)]="selectedLotId" name="selectedLotId" (change)="onLotSelected()">
+        <option value="">-- Choisir un lot --</option>
+        @for (lot of lots(); track lot.id_lot) {
+          <option [value]="lot.id_lot">
+            Lot #{{ lot.id_lot }} - Race #{{ lot.id_race }} ({{ lot.nbr_poulet }} poulets) - Créé: {{ lot.date_creation }}
+          </option>
+        }
+      </select>
+    </div>
+    <div class="form-row">
+      <label>Date de consultation</label>
+      <input type="date" [(ngModel)]="selectedDate" name="selectedDate" />
+    </div>
+    <button type="submit" [disabled]="loading()">
+      {{ loading() ? 'Calcul en cours...' : 'Calculer la situation' }}
+    </button>
+  </form>
+
+  @if (situation()) {
+    <h3>Résultats pour le lot #{{ situation()!.id_lot }} au {{ situation()!.date_consultation }}</h3>
+    
+    <div class="results-grid">
+      <div class="result-card">
+        <label>Nombre de poulets à cette date</label>
+        <p class="value">{{ situation()!.nbr_poulet_a_date_t }} poulets</p>
+      </div>
+      
+      <div class="result-card">
+        <label>Nombre de décès cumulés</label>
+        <p class="value">{{ situation()!.nbr_deces }} décès</p>
+      </div>
+      
+      <div class="result-card">
+        <label>Nombre d'œufs cumulés</label>
+        <p class="value">{{ situation()!.nbr_oeufs }} œufs</p>
+      </div>
+      
+      <div class="result-card">
+        <label>Poids moyen</label>
+        <p class="value">{{ situation()!.poids_moyen }} g</p>
+      </div>
+      
+      <div class="result-card">
+        <label>Estimation valeur poulets</label>
+        <p class="value">{{ situation()!.estimation_poulet }} €</p>
+      </div>
+      
+      <div class="result-card">
+        <label>Estimation valeur œufs</label>
+        <p class="value">{{ situation()!.estimation_oeufs }} €</p>
+      </div>
+      
+      <div class="result-card">
+        <label>Prix achat (Akoho)</label>
+        <p class="value">{{ situation()!.prix_achat_akoho }} €</p>
+      </div>
+      
+      <div class="result-card">
+        <label>Prix nourriture (Sakafo)</label>
+        <p class="value">{{ situation()!.prix_sakafo }} €</p>
+      </div>
+    </div>
+  }
+</div>
